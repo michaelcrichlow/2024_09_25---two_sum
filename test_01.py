@@ -1,62 +1,44 @@
-def which_is_longer(s1: str, s2: str) -> int:
-    if len(s1) == len(s2):
-        return 0
-    if len(s1) > len(s2):
-        return 1
-    if len(s1) < len(s2):
-        return 2
-    return -1
+# works, but inelegant and too slow
+def two_sum(nums: list[int], target: int) -> list[int]:
+    local_list = []
+    for i in range(len(nums) - 1):
+        idx = i + 1
+        while idx < len(nums):
+            if (nums[i] + nums[idx]) != target:
+                if idx + 1 < len(nums):
+                    idx += 1
+                else:
+                    break
+            if nums[i] + nums[idx] == target:
+                local_list.append(i)
+                local_list.append(idx)
+                return local_list
+
+    return []
 
 
-def longest_common_ending(s1: str, s2: str) -> str:
-    # guard clause
-    if len(s1) == 0 or len(s2) == 0:
-        return ""
+# ended up going with this one. It's nice and fast.
+def two_sum_new(nums: list[int], target: int) -> list[int]:
+    # make a dictionary of values
+    num_dict: dict[int, int] = {}
+    final_list = []
 
-    res = ""
-    longer = which_is_longer(s1, s2)
-    if longer != -1:
-        match longer:
-            # baseline test
-            case 0:
-                for i, val in enumerate(s1):
-                    if val == s2[i]:
-                        res += val
-                    else:
-                        res = ""
-            case 1:
-                # trim s1 to length of s2
-                idx = len(s1) - len(s2)
-                s1_test = s1[idx:]
+    # as you build dictionary, check to see if 'target - val' is already in it
+    for i, val in enumerate(nums):
+        if (target - val) in num_dict:
+            # index of this specific 'val'
+            final_list.append(i)
+            # index of value already in dictionary
+            final_list.append(num_dict[target - val])
+            break
+        num_dict[val] = i
 
-                # same as case 0
-                for i, val in enumerate(s1_test):
-                    if val == s2[i]:
-                        res += val
-                    else:
-                        res = ""
-            case 2:
-                # trim s2 to length of s1
-                idx = len(s2) - len(s1)
-                s2_test = s2[idx:]
-
-                # same as case 0
-                for i, val in enumerate(s1):
-                    if val == s2_test[i]:
-                        res += val
-                    else:
-                        res = ""
-
-    return res
+    return final_list
 
 
 def main() -> None:
-    val_02 = "coding"
-    val_01 = "reading"
-
-    val = longest_common_ending(val_01, val_02)
+    val = two_sum_new([2, 7, 11, 15], 9)
     print(val)
-    # OUTPUT: ding
 
 
 if __name__ == '__main__':
