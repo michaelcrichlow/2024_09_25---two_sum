@@ -2,7 +2,6 @@ package test
 
 import "core:fmt"
 import "core:mem"
-import "core:slice"
 print :: fmt.println
 printf :: fmt.printf
 
@@ -87,6 +86,7 @@ two_sum :: proc(nums: []int, target: int, the_allocator := context.allocator) ->
 		if (target - val) in num_dict {
 			append(&final_list, i)
 			append(&final_list, num_dict[target - val])
+			break
 		}
 		num_dict[val] = i
 	}
